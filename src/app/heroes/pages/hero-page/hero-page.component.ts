@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroesService } from '../../services/heroes.service';
-import { Hero } from '../../interfaces/hero.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { delay, switchMap } from 'rxjs';
+import { Hero } from '../../interfaces/hero.interface';
 
 @Component({
   selector: 'app-hero-page',
@@ -10,29 +10,27 @@ import { delay, switchMap } from 'rxjs';
   styles: [],
 })
 export class HeroPageComponent implements OnInit {
-  public hero?: Hero;
+  public hero?: Hero; //Antes de hacer la peticion esta como undefined
 
   constructor(
-    private service: HeroesService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
+    private heroesService: HeroesService,
+    private activatedRoute: ActivatedRoute, //Inyectar para obtener los params
+    private router: Router // similar a useRouter de nextjs, para redireccionar
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.params
       .pipe(
-        // delay(3000), // probar el loading
-        switchMap(({ id }) => this.service.getHeroById(id))
+        // delay(3000),
+        switchMap(({ id }) => this.heroesService.getHeroById(id))
       )
       .subscribe((hero) => {
         if (!hero) return this.router.navigate(['/heroes/list']);
-
-        this.hero = hero;
-        return;
+        return (this.hero = hero);
       });
   }
 
-  goBack() {
+  goBack(): void {
     this.router.navigateByUrl('/heroes/list');
   }
 }

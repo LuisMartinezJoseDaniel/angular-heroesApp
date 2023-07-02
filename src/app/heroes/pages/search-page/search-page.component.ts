@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
-
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-
-import { Hero } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
+import { FormControl } from '@angular/forms';
+import { Hero } from '../../interfaces/hero.interface';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-search-page',
@@ -12,28 +10,29 @@ import { HeroesService } from '../../services/heroes.service';
   styles: [],
 })
 export class SearchPageComponent {
-  public searchInput = new FormControl(''); // Input reactivo, similar al event del input
+  public searchInput = new FormControl();
   public heroes: Hero[] = [];
   public selectedHero?: Hero;
 
-  constructor(private heroesService: HeroesService) {}
+  constructor(private service: HeroesService) {}
 
-  searchHero(): void {
+  searchHero() {
     const value: string = this.searchInput.value || '';
-    this.heroesService
+
+    // hacer la peticion con el value
+    this.service
       .getSuggestions(value)
       .subscribe((heroes) => (this.heroes = heroes));
   }
 
-  // Al dar click sobre el un option del select del autocomplete
-  onSelectedOption(event: MatAutocompleteSelectedEvent): void {
+  onSelectedOption(event: MatAutocompleteSelectedEvent) {
     if (!event.option.value) {
       this.selectedHero = undefined;
       return;
     }
-    const hero: Hero = event.option.value; // Hero de las option del select
 
-    this.searchInput.setValue(hero.superhero); // Setea el valor del input con el nombre del heroe
+    const hero: Hero = event.option.value;
+    this.searchInput.setValue(hero.superhero);
     this.selectedHero = hero;
   }
 }
