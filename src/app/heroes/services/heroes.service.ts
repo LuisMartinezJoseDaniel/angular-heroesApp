@@ -19,4 +19,10 @@ export class HeroesService {
       .get<Hero>(`${this.baseUrl}/heroes/${id}`)
       .pipe(catchError((error) => of(undefined))); //en caso de error of ->retorna un observable de undefined
   }
+
+  getSuggestions(query: string): Observable<Hero[]> {
+    return this.http
+      .get<Hero[]>(`${this.baseUrl}/heroes?q=${query}&_limit=6)}`)
+      .pipe(catchError((error) => of([])));
+  }
 }

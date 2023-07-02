@@ -1,1 +1,38 @@
-<p>search-page works!</p>
+<div class="flex flex-column p-4">
+  <h3>Buscador de héroes</h3>
+
+  <mat-form-field>
+    <mat-label>Buscador de heroes</mat-label>
+    <!-- Se necesita importar en heroes module el ReactiveFormsModule -->
+    <input
+      matInput
+      type="text"
+      [formControl]="searchInput"
+      (input)="searchHero()"
+      [matAutocomplete]="auto"
+    />
+    <!-- Basado en lo que escriba el usuario se hace una peticion mediante el service -->
+    <!-- para poder iterar sobre los resultados como un select de options -->
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      (optionSelected)="onSelectedOption($event)"
+    >
+      <mat-option *ngFor="let hero of heroes" [value]="hero">
+        {{ hero.superhero }}
+      </mat-option>
+      <mat-option
+        *ngIf="
+          heroes.length === 0 &&
+          searchInput.value &&
+          searchInput.value.length > 0
+        "
+        >No se encontró nada con el término '{{
+          searchInput.value
+        }}'</mat-option
+      >
+    </mat-autocomplete>
+  </mat-form-field>
+
+  {{ selectedHero | json }}
+</div>
