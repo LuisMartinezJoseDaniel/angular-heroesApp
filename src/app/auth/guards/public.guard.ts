@@ -22,7 +22,7 @@ export const canMatchPublicGuard: CanMatchFn = (
     tap((isAuthenticated) => {
       if (isAuthenticated) router.navigate(['./']);
     }),
-    // Si no esta autenticado, hay que transformar isAuthenticated a true, para que el guard lo deje pasar
+    // Si no esta autenticado, hay que transformar isAuthenticated a true, tap no modifica nada, para que el guard lo deje pasar
     // de otra forma, el guard no deja ver el auth/login debido a que esta restringido, lo que causa una redireccion a 404
     map((isAuthenticated) => !isAuthenticated)
   );
